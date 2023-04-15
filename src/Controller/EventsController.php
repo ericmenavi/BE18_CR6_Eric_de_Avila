@@ -13,10 +13,18 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/events')]
 class EventsController extends AbstractController
 {
-    #[Route('/', name: 'app_events_index', methods: ['GET'])]
+    #[Route('/events', name: 'app_events_index', methods: ['GET'])]
     public function index(EventsRepository $eventsRepository): Response
     {
         return $this->render('events/index.html.twig', [
+            'events' => $eventsRepository->findAll(),
+        ]);
+    }
+
+    #[Route('/', name: 'app_events_home', methods: ['GET'])]
+    public function home(EventsRepository $eventsRepository): Response
+    {
+        return $this->render('events/home.html.twig', [
             'events' => $eventsRepository->findAll(),
         ]);
     }
@@ -69,7 +77,7 @@ class EventsController extends AbstractController
     #[Route('/{id}', name: 'app_events_delete', methods: ['POST'])]
     public function delete(Request $request, Events $event, EventsRepository $eventsRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->request->get('_token'))) {
             $eventsRepository->remove($event, true);
         }
 
