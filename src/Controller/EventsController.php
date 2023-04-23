@@ -16,18 +16,26 @@ class EventsController extends AbstractController
     #[Route('/events', name: 'app_events_index', methods: ['GET'])]
     public function index(EventsRepository $eventsRepository): Response
     {
+        $events = $eventsRepository->findAll();
+        shuffle($events);
+
         return $this->render('events/index.html.twig', [
-            'events' => $eventsRepository->findAll(),
+            'events' => $events,
         ]);
     }
 
     #[Route('/', name: 'app_events_home', methods: ['GET'])]
     public function home(EventsRepository $eventsRepository): Response
     {
+        $events = $eventsRepository->findAll();
+        shuffle($events);
+
         return $this->render('events/home.html.twig', [
-            'events' => $eventsRepository->findAll(),
+            'events' => $events,
+
         ]);
     }
+
 
     #[Route('/new', name: 'app_events_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EventsRepository $eventsRepository): Response
